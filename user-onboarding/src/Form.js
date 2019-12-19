@@ -86,9 +86,28 @@ const FormikPersonForm = withFormik({
         ),
         terms: Yup.boolean().oneOf([true], "Must Accept Terms and Conditions")
 
-    })
+    }),
 
     //end of validation schema
+    
+//Used axios post request to get the data back
+    handleSubmit(
+        values, {setStatus, resetForm}
+
+    ) {
+        console.log("submitting", values);
+        axios
+        .post("https://reqres.in/api/users", values
+        )
+        .then(res => {
+            console.log("success", res);
+            setStatus(res.data);
+            resetForm();
+        })
+        .catch(err => 
+            console.log(err.response)
+            );
+    }
 
 
 })(PersonForm)
