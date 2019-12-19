@@ -5,8 +5,45 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  
 }
 
+.person-form {
+  display:flex;
+  flex-direction: column;
+  
+}
+
+ul {
+  text-align: center;
+  list-style-position: inside;
+  font-size: 30px;
+  font-family: 'Dosis', sans-serif;
+}
+
+.errors{ 
+
+  color: red;
+  font-family: 'Dosis', sans-serif;
+  font-size:25px;
+
+}
+
+.required-fields{
+  font-family: 'Dosis', sans-serif;
+  font-size: 25px;
+  
+}
+
+.checkbox-container{
+  font-family: 'Dosis', sans-serif;
+  font-size:25px;
+}
+
+button{
+  font-family: 'Dosis', sans-serif;
+  font-size:30px;
+}
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;

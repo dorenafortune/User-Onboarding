@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState, useEffect } from "react"
 import * as Yup from "yup";
 import axios from "axios";
 import { withFormik, Form, Field } from "formik";
@@ -7,30 +7,45 @@ import { withFormik, Form, Field } from "formik";
 // Used <Form>, label htmoFor, then Field along with id, type, name, placeholder to create initial boxes
 // Made button with <button> and type:checkmark to create Terms of Service box.
 
-const PersonForm = ({ values, errors, touched }) => {
+
+//Step 3. Created errors, touched so that message will pop up when requirement is not written in field. Wrote errors, touched, values in between PersonForm.
+//{touched.name && errors.name && <p className="errors">{errors.name}</p>} 
+
+//Step 4. Create an empty array of users and display returned data to screen, used useState and useEffect
+
+
+const PersonForm = ({ status, values, errors, touched }) => {
+    const [ users, setUsers ] = useState([]);
+    useEffect(() => {
+        console.log("status has changed", status);
+        status && setUsers(users => [...users, status]);
+    }, [status]);
     return (
 
         <div className='person-form'>
+            <div className ="align-labels">
             <Form>
-                <label htmlFor='name'>Name:</label>
+                <label htmlFor='name' className= "required-fields">Name:</label>
                 <Field
                     id="name"
                     type="text"
                     name="name"
                     placeholder="Name"
                 />
-                {touched.name && errors.name && <p className="errors">{errors.name}</p>}
+                {touched.name && errors.name && <p className="errors">{errors.name}</p>} 
+                <br></br>
 
-                <label htmlFor='email'>Email:</label>
+                <label htmlFor='email' className= "required-fields">Email:</label>
                 <Field
                     id="email"
                     type="text"
                     name="email"
                     placeholder="Email"
                 />
+                <br></br>
 
                 {touched.email && errors.email && <p className="errors">{errors.email}</p>}
-                <label htmlFor='Password'>Password:</label>
+                <label htmlFor='Password' className= "required-fields">Password:</label>
                 <Field
                     id="password"
                     type="password"
@@ -38,9 +53,10 @@ const PersonForm = ({ values, errors, touched }) => {
                     placeholder="Password"
 
                 />
-                {touched.password && errors.password && <p className="errors">{errors.password}</p>}
                 <br></br>
-                
+                {touched.password && errors.password && <p className="errors">{errors.password}</p>}
+               
+               <br></br>
 
                 <label htmlFor="terms" className="checkbox-container">Terms of Service</label>
                 <Field
@@ -48,17 +64,27 @@ const PersonForm = ({ values, errors, touched }) => {
                     type="checkbox"
                     name="terms"
                 />
-                <br></br>
+               <br></br>
+               {touched.terms && errors.terms && <p className="errors">{errors.terms}</p>}
                 <button type="submit">Submit</button>
 
+                
+
             </Form>
+            </div>
+            {users.map(user => (
+                <ul key={user.id}>
+                    <li>Name: {user.name}</li>
+                    <li>Email: {user.email}</li>
+                </ul>
+            ))}
         </div>
+
+
 
 
     );
 };
-
-
 
 const FormikPersonForm = withFormik({
     mapPropsToValues({ name, email, password, terms }) {
@@ -84,12 +110,12 @@ const FormikPersonForm = withFormik({
         password: Yup.string().required(
             "Please put in a password"
         ),
-        terms: Yup.boolean().oneOf([true], "Must Accept Terms and Conditions")
+        terms: Yup.boolean().oneOf([true], "Must accept terms and conditions")
 
     }),
 
     //end of validation schema
-    
+
 //Used axios post request to get the data back
     handleSubmit(
         values, {setStatus, resetForm}
