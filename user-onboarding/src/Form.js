@@ -7,47 +7,53 @@ import { withFormik, Form, Field } from "formik";
 // Used <Form>, label htmoFor, then Field along with id, type, name, placeholder to create initial boxes
 // Made button with <button> and type:checkmark to create Terms of Service box.
 
-const PersonForm = ({}) => {
+const PersonForm = ({ values, errors, touched }) => {
     return (
 
         <div className='person-form'>
             <Form>
                 <label htmlFor='name'>Name:</label>
                 <Field
-                    id="user"
+                    id="name"
                     type="text"
-                    name="userName"
+                    name="name"
                     placeholder="Name"
                 />
+                {touched.name && errors.name && <p className="errors">{errors.name}</p>}
 
                 <label htmlFor='email'>Email:</label>
                 <Field
                     id="email"
                     type="text"
-                    name="userEmail"
+                    name="email"
                     placeholder="Email"
                 />
-                  <label htmlFor='Password'>Password:</label>
+
+                {touched.email && errors.email && <p className="errors">{errors.email}</p>}
+                <label htmlFor='Password'>Password:</label>
                 <Field
                     id="password"
                     type="password"
-                    name="userPassword"
+                    name="password"
                     placeholder="Password"
-    
+
                 />
+                {touched.password && errors.password && <p className="errors">{errors.password}</p>}
                 <br></br>
+                
+
                 <label htmlFor="terms" className="checkbox-container">Terms of Service</label>
                 <Field
-                 id="terms"
-                 type="checkbox"
-                 name="terms"
-                 />
-                 <br></br>
+                    id="terms"
+                    type="checkbox"
+                    name="terms"
+                />
+                <br></br>
                 <button type="submit">Submit</button>
 
             </Form>
         </div>
-     
+
 
     );
 };
@@ -55,36 +61,36 @@ const PersonForm = ({}) => {
 
 
 const FormikPersonForm = withFormik({
-    mapPropsToValues ({userName, userEmail, userPassword,terms }){
-        return{
-            userName: userName || '',
-            userEmail: userEmail || '',
-            userPassword: userPassword || '',
+    mapPropsToValues({ name, email, password, terms }) {
+        return {
+            name: name || '',
+            email: email || '',
+            password: password || '',
             terms: terms || false
 
         };
     },
-//Validation schema
-        validationSchema: Yup.object().shape({
-            userName: Yup.string().required(
-                "Please put in a name"
-            ),
-            userEmail: Yup.string().required(
-                "Please put in an email"
-            ),
 
-            userPassword: Yup.string().required(
-                "Please put in a password"
-            ),
+    //step 2. Created Validation schema. Used Yup.boolean() for checkbox. Everything else was a string.
+    //Validation schema
+    validationSchema: Yup.object().shape({
+        name: Yup.string().required(
+            "Please put in a name"
+        ),
+        email: Yup.string().required(
+            "Please put in an email"
+        ),
+
+        password: Yup.string().required(
+            "Please put in a password"
+        ),
+        terms: Yup.boolean().oneOf([true], "Must Accept Terms and Conditions")
+
+    })
+
+    //end of validation schema
 
 
-            terms: Yup.boolean().oneOf([true], "Must Accept Terms and Conditions")
-
-        })
-
-//end of validation schema
-
-    
 })(PersonForm)
 
 export default FormikPersonForm
